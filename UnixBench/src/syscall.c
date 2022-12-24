@@ -28,7 +28,9 @@ char SCCSid[] = "@(#) @(#)syscall.c:3.3 -- 5/15/91 19:30:21";
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#ifndef __HAIKU__
 #include <sys/syscall.h>
+#endif
 #include "timeit.c"
 
 unsigned long iter;
@@ -66,7 +68,11 @@ char	*argv[];
         case 'm':
 	   while (1) {
 		close(dup(0));
+#ifndef __HAIKU__
 		syscall(SYS_getpid);
+#else
+    getpid();
+#endif
 		getuid();
 		umask(022);
 		iter++;
@@ -80,7 +86,11 @@ char	*argv[];
            /* NOTREACHED */
         case 'g':
            while (1) {
+#ifndef __HAIKU__
                 syscall(SYS_getpid);
+#else
+                getpid();
+#endif
                 iter++;
            }
            /* NOTREACHED */
